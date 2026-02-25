@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Arcade</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="arcadeHome" class="arcade-home" aria-label="Menu arcade">
+        <div class="arcade-home__card">
+          <p class="eyebrow">Arcade Menu</p>
+          <h1>Seleziona un gioco</h1>
+          <p class="arcade-home__text">
+            Icone grandi per scegliere il gioco. La prima apre Snake.
+          </p>
+
+          <div class="arcade-grid" role="grid" aria-label="Giochi disponibili">
+            <button id="homeSnakeBtn" class="arcade-tile arcade-tile--primary" type="button">
+              <span class="arcade-tile__icon">🐍</span>
+              <span class="arcade-tile__label">Snake</span>
+              <span class="arcade-tile__hint">Clicca per entrare</span>
+            </button>
+            <button id="homeSnakeSmoothBtn" class="arcade-tile arcade-tile--primary" type="button">
+              <span class="arcade-tile__icon">⚡</span>
+              <span class="arcade-tile__label">Snake Smooth</span>
+              <span class="arcade-tile__hint">Modalità fluida</span>
+            </button>
+            <button class="arcade-tile" type="button" disabled>
+              <span class="arcade-tile__icon">🚀</span>
+              <span class="arcade-tile__label">Prossimo</span>
+            </button>
+            <button class="arcade-tile" type="button" disabled>
+              <span class="arcade-tile__icon">🧩</span>
+              <span class="arcade-tile__label">Prossimo</span>
+            </button>
+            <button class="arcade-tile" type="button" disabled>
+              <span class="arcade-tile__icon">🎯</span>
+              <span class="arcade-tile__label">Prossimo</span>
+            </button>
+            <button class="arcade-tile" type="button" disabled>
+              <span class="arcade-tile__icon">⚡</span>
+              <span class="arcade-tile__label">Prossimo</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="snakeScreen" class="panel" aria-label="Snake" hidden>
+        <div id="snakeOverlay" class="overlay" aria-live="polite">
+          <div class="overlay__card">
+            <div id="snakeMenuScreen" class="overlay__screen">
+              <p id="snakeMenuEyebrow" class="overlay__eyebrow">Snake</p>
+              <h2 id="snakeMenuTitle" class="overlay__title">Menu</h2>
+              <p id="snakeMenuText" class="overlay__text">
+                Apri il negozio in alto a destra oppure premi Play per scegliere il livello.
+              </p>
+              <div class="overlay__menu-actions overlay__menu-actions--single">
+                <button id="overlayPlayBtn" class="play-btn" type="button">Play</button>
+                <button id="overlayBackHomeBtn" type="button">Torna all'arcade</button>
+              </div>
+            </div>
+
+            <div id="snakeLevelsScreen" class="overlay__screen" hidden>
+              <p class="overlay__eyebrow">Livelli</p>
+              <h2 class="overlay__title overlay__title--small">Scegli 1 / 2 / 3</h2>
+              <p class="overlay__text">1 Facile, 2 Media, 3 Difficile.</p>
+
+              <div class="overlay__difficulty" role="group" aria-label="Difficoltà">
+                <div class="difficulty-picker">
+                  <button type="button" data-difficulty="easy" class="difficulty-btn is-active">
+                    1
+                    <span>Facile</span>
+                  </button>
+                  <button type="button" data-difficulty="medium" class="difficulty-btn">
+                    2
+                    <span>Media</span>
+                  </button>
+                  <button type="button" data-difficulty="hard" class="difficulty-btn">
+                    3
+                    <span>Difficile</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="overlay__menu-actions overlay__menu-actions--triple">
+                <button id="levelsBackBtn" type="button">Indietro</button>
+                <button id="levelsShopBtn" type="button">Negozio</button>
+                <button id="overlayStartBtn" class="play-btn play-btn--small" type="button">
+                  Inizia
+                </button>
+              </div>
+            </div>
+
+            <div id="snakeShopScreen" class="overlay__screen" hidden>
+              <p class="overlay__eyebrow">Negozio</p>
+              <h2 class="overlay__title overlay__title--small">Skin Snake</h2>
+              <div class="shop-summary">
+                <div class="shop-summary__item">
+                  <span>Coin</span>
+                  <strong id="shopCoins">0</strong>
+                </div>
+                <div class="shop-summary__item">
+                  <span>Skin attiva</span>
+                  <strong id="shopActiveSkin">Classica</strong>
+                </div>
+              </div>
+
+              <div class="shop-section">
+                <div class="shop-section__head">
+                  <h3>Negozio skin</h3>
+                  <p>Compra con i coin raccolti (1 mela = 1 coin).</p>
+                </div>
+                <div id="shopList" class="shop-list" aria-label="Skin disponibili"></div>
+              </div>
+
+              <div class="shop-section">
+                <div class="shop-section__head">
+                  <h3>Le mie skin</h3>
+                  <p>Equipaggia qui le skin già acquistate.</p>
+                </div>
+                <div id="ownedSkinsList" class="owned-skins" aria-label="Skin possedute"></div>
+              </div>
+
+              <div class="shop-section">
+                <div class="shop-section__head">
+                  <h3>Temi</h3>
+                  <p>Cambia il look dell'interfaccia.</p>
+                </div>
+                <div id="themeList" class="theme-list" role="group" aria-label="Temi UI">
+                  <button type="button" data-theme="dark">Scuro</button>
+                  <button type="button" data-theme="light">Platino</button>
+                  <button type="button" data-theme="green">Verde</button>
+                  <button type="button" data-theme="gold">Oro</button>
+                </div>
+              </div>
+
+              <div class="overlay__menu-actions">
+                <button id="shopBackBtn" type="button">Indietro</button>
+                <button id="shopBackHomeBtn" type="button">Arcade</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar">
+          <div class="input-toggle" role="group" aria-label="Modalità controllo">
+            <button id="pcModeBtn" type="button" class="is-active">PC</button>
+            <button id="mobileModeBtn" type="button">Mobile</button>
+          </div>
+
+          <div class="topbar__right">
+            <div class="coin-pill" aria-live="polite">
+              <span>Coin</span>
+              <strong id="coinsDisplay">0</strong>
+            </div>
+            <button id="topArcadeBtn" type="button">🏠 Arcade</button>
+            <button id="topShopBtn" type="button">🛒 Negozio</button>
+          </div>
+        </div>
+
+        <header class="panel__header">
+          <div>
+            <h2 id="snakePageTitle">Snake</h2>
+            <p id="snakePageSubtitle" class="subtitle">Modalità classica su griglia</p>
+          </div>
+          <div class="hud" aria-live="polite">
+            <div class="hud__item">
+              <span>Punteggio</span>
+              <strong id="score">0</strong>
+            </div>
+            <div class="hud__item">
+              <span>Best</span>
+              <strong id="bestScore">0</strong>
+            </div>
+            <div class="hud__item">
+              <span>Stato</span>
+              <strong id="status">Pronto</strong>
+            </div>
+          </div>
+        </header>
+
+        <div class="game-layout">
+          <div class="game-stage">
+            <div id="board" class="board" role="grid" aria-label="Snake board" tabindex="0"></div>
+          </div>
+
+          <aside class="game-side" aria-label="Comandi gioco">
+            <p class="help">
+              PC: Frecce/WASD. Spazio pausa. Invio restart.
+              <br />
+              Mobile: usa le frecce touch.
+            </p>
+
+            <div class="actions">
+              <button id="startBtn" type="button">Nuova partita</button>
+              <button id="pauseBtn" type="button">Pausa</button>
+            </div>
+
+            <div class="controls" aria-label="Controlli touch">
+              <button type="button" data-dir="up" aria-label="Su">↑</button>
+              <div class="controls__row">
+                <button type="button" data-dir="left" aria-label="Sinistra">←</button>
+                <button type="button" data-dir="down" aria-label="Giù">↓</button>
+                <button type="button" data-dir="right" aria-label="Destra">→</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
